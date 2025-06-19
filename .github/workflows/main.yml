@@ -28,4 +28,4 @@ jobs:
 
     - name: Run preprocessing script
       run: |
-        python preprocessing/automate_Nama-siswa.py
+        python preprocessing/automate_bertnardo_mario_uskono.py
