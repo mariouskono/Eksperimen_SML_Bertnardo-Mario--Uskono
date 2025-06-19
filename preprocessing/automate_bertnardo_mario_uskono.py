@@ -17,7 +17,7 @@ from sklearn.ensemble import RandomForestRegressor  # Change to Regressor
 from sklearn.metrics import mean_squared_error, r2_score  # Metrics for regression
 
 # Menentukan path relatif ke file dataset
-dataset_path = os.path.join(os.path.dirname(__file__), '..', 'dataset_tempat_wisata_bali.csv')
+dataset_path = os.path.join(os.path.dirname(__file__), '..', 'dataset_tempat_wisata_bali-raw.csv')
 
 # Memeriksa apakah file dataset ada
 if not os.path.isfile(dataset_path):
