@@ -13,11 +13,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.ensemble import RandomForestRegressor  # Change to Regressor
+from sklearn.metrics import mean_squared_error, r2_score  # Metrics for regression
 
 # Menentukan path relatif ke file dataset
-dataset_path = os.path.join(os.path.dirname(__file__), '..', 'dataset_tempat_wisata_bali-raw.csv')
+dataset_path = os.path.join(os.path.dirname(__file__), '..', 'dataset_tempat_wisata_bali.csv')
 
 # Memeriksa apakah file dataset ada
 if not os.path.isfile(dataset_path):
@@ -83,18 +83,25 @@ y = df['rating']
 # Membagi data menjadi data latih dan data uji
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Membuat dan melatih model Random Forest
-model = RandomForestClassifier(random_state=42)
+# Membuat dan melatih model Random Forest Regressor
+model = RandomForestRegressor(random_state=42)
 model.fit(X_train, y_train)
 
 # Melakukan prediksi
 y_pred = model.predict(X_test)
 
-# Menampilkan hasil evaluasi model
+# Evaluasi model
 print("\nEvaluasi Model:")
-print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
-print("\nClassification Report:")
-print(classification_report(y_test, y_pred))
+print(f"Mean Squared Error: {mean_squared_error(y_test, y_pred):.4f}")
+print(f"R^2 Score: {r2_score(y_test, y_pred):.4f}")
+
+# Menampilkan pentingnya fitur
+plt.figure(figsize=(10, 6))
+sns.barplot(x=model.feature_importances_, y=X_train.columns)
+plt.title('Feature Importances')
+plt.xlabel('Importance')
+plt.ylabel('Features')
+plt.show()
 
 # Menyimpan dataset yang telah diproses ke file CSV
 processed_file_path = os.path.join(os.path.dirname(__file__), '..', 'dataset_tempat_wisata_bali_processed.csv')
