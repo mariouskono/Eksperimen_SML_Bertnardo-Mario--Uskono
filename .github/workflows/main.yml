@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2  # Menyiapkan Python di runner
       with:
-        python-version: '3.8'  # Tentukan versi Python yang ingin digunakan
+        python-version: '3.8'  # Tentukan versi Python yang ingin digunakan 
 
     - name: Install dependencies
       run: |
