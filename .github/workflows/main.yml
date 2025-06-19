@@ -1,0 +1,27 @@
+name: Preprocessing Workflow
+
+on:
+  push:
+    branches:
+      - main  # Atur agar workflow berjalan ketika ada perubahan di branch 'main'
+
+jobs:
+  preprocess:
+    runs-on: ubuntu-latest  # Gunakan runner berbasis Ubuntu
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2  # Mengambil kode dari repository
+
+    - name: Set up Python
+      uses: actions/setup-python@v2  # Menyiapkan Python di runner
+      with:
+        python-version: '3.8'  # Tentukan versi Python yang ingin digunakan
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt  # Menginstal dependensi yang ada di requirements.txt
+
+    - name: Run preprocessing script
+      run: |
+        python preprocessing/automate_Nama-siswa.py  # Jalankan file Python untuk preprocessing
