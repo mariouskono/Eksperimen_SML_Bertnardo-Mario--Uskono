@@ -22,13 +22,13 @@ Data dikumpulkan melalui **scraping otomatis** dari **Google Maps**. Rating dan 
 
 * **nama**: Nama tempat wisata.
 * **kategori**: Kategori/jenis tempat wisata (misalnya: Alam, Budaya, Rekreasi, Umum).
-* **kabupaten\_kota**: Kabupaten atau kota tempat wisata tersebut berada.
+* **kabupaten_kota**: Kabupaten atau kota tempat wisata tersebut berada.
 * **rating**: Rating rata-rata pengunjung (skala 1-5).
 * **preferensi**: Klasifikasi preferensi wisata (misalnya: Wisata Alam, Wisata Budaya).
-* **link\_lokasi**: URL ke halaman lokasi tempat wisata di Google Maps.
+* **link_lokasi**: URL ke halaman lokasi tempat wisata di Google Maps.
 * **latitude**: Koordinat latitude tempat wisata.
 * **longitude**: Koordinat longitude tempat wisata.
-* **link\_gambar**: URL gambar tempat wisata atau teks pengganti.
+* **link_gambar**: URL gambar tempat wisata atau teks pengganti.
 
 #### **Tujuan Dataset**
 
@@ -39,7 +39,7 @@ Data dikumpulkan melalui **scraping otomatis** dari **Google Maps**. Rating dan 
 
 #### **Contoh Data**
 
-| nama                | kategori | kabupaten\_kota  | rating | preferensi      | link                                                    | latitude  | longitude   |
+| nama                | kategori | kabupaten_kota  | rating | preferensi      | link                                                    | latitude  | longitude   |
 | ------------------- | -------- | ---------------- | ------ | --------------- | ------------------------------------------------------- | --------- | ----------- |
 | Taman Mumbul Sangeh | Alam     | Kabupaten Badung | 4.6    | Wisata Alam     | [Link](https://www.google.com/maps/place/Taman+Mumbul)  | -8.483959 | 115.2122881 |
 | Pantai Mengening    | Rekreasi | Kabupaten Badung | 4.7    | Wisata Rekreasi | [Link](https://www.google.com/maps/place/Pantai+Mengen) | -8.639532 | 115.1007188 |
@@ -96,7 +96,10 @@ Sekarang, kita akan memuat dataset yang telah Anda pilih ke dalam notebook. Lang
 #### **Langkah 3.1: Memuat Dataset Menggunakan Pandas**
 """
 
-file_path = '/content/dataset_tempat_wisata_bali.csv'
+# Menentukan path relatif dari file CSV
+file_path = 'dataset_tempat_wisata_bali-raw.csv'
+
+# Memuat dataset ke dalam DataFrame
 df = pd.read_csv(file_path)
 
 df.head()
@@ -108,7 +111,8 @@ Setelah dataset dimuat, kita perlu memeriksa beberapa hal untuk memastikan data 
 
 1. **Struktur Dataset**: Pastikan kolom dan baris sudah benar.
 2. **Tipe Data**: Pastikan tipe data pada setiap kolom sesuai (misalnya, kolom `rating` seharusnya bertipe float, `latitude` dan `longitude` seharusnya bertipe float).
-3. **Missing Values**: Periksa apakah ada nilai yang hilang (missing) pada dataset."""
+3. **Missing Values**: Periksa apakah ada nilai yang hilang (missing) pada dataset.
+"""
 
 print(df.info())
 
@@ -122,12 +126,10 @@ Setelah dataset berhasil dimuat, kita akan melakukan **Exploratory Data Analysis
 
 #### **Langkah 4.1: Memvisualisasikan Distribusi Data**
 
-Mari kita mulai dengan melihat distribusi data pada kolom-kolom penting, seperti **rating**, **kategori**, dan **preferensi**.
+Mari kita mulai dengan melihat distribusi data pada kolom-kolom penting, seperti **rating**, **kategori**, dan **preferensi**."""
 
 
- **Tujuan**: Memahami sebaran nilai rating tempat wisata dan melihat apakah ada rating yang sangat rendah atau tinggi.
-"""
-
+# Visualisasi distribusi rating
 plt.figure(figsize=(10, 6))
 sns.histplot(df['rating'], bins=20, kde=True)
 plt.title('Distribusi Rating Tempat Wisata')
@@ -201,123 +203,11 @@ sns.boxplot(x=df['rating'])
 plt.title('Outliers pada Kolom Rating')
 plt.show()
 
-"""### **Langkah 4.7: Menyimpulkan Hasil EDA**
+"""#### **Langkah 4.7: Menyimpulkan Hasil EDA**
 
 Setelah melakukan **Exploratory Data Analysis (EDA)**, kita harus membuat **kesimpulan** mengenai dataset ini. Beberapa poin yang perlu diperhatikan:
 
 * **Data sudah bersih**, tanpa missing values, sehingga tidak perlu langkah imputation.
-* Kolom-kolom seperti **latitude**, **longitude**, **kategori**, dan **preferensi** sangat relevan dan akan berguna untuk analisis dan pemodelan.
-* **Outliers** pada kolom **rating** tidak perlu dihapus secara otomatis karena bisa jadi informasi berharga.
-* Tidak ada korelasi yang kuat antar fitur numerik, tetapi **semua fitur** masih bisa dimanfaatkan untuk pemodelan.
-
-# **5. Data Preprocessing**
-
-### **Langkah 5: Data Preprocessing**
-
-Pada tahap ini, kita akan mempersiapkan data agar siap digunakan dalam pelatihan model machine learning. Proses **Data Preprocessing** melibatkan beberapa langkah untuk memastikan kualitas data yang optimal, serta untuk menangani masalah seperti nilai yang hilang, duplikasi, dan outliers.
-
-Berikut adalah tahapan yang perlu dilakukan untuk preprocessing data Anda.
-
----
-
-#### **Langkah 5.1: Menghapus atau Menangani Data Kosong (Missing Values)**
-
-Meskipun pada tahap **EDA** kita telah memeriksa apakah ada missing values dan kita tahu bahwa dataset kita tidak mengandung nilai yang hilang, namun penting untuk melakukan pengecekan tambahan dan mempersiapkan cara untuk menangani missing values di masa depan.
-
-Jika ada nilai yang hilang, Anda bisa:
-
-* **Menghapus** baris dengan missing values.
-* **Mengisi** missing values dengan nilai tertentu (misalnya, rata-rata untuk fitur numerik atau modus untuk fitur kategorikal).
-
-Contoh kode:
-"""
-
-# Menghapus baris dengan missing values (jika ada)
-df_cleaned = df.dropna()
-
-# Atau mengisi missing values dengan nilai tertentu
-df['rating'].fillna(df['rating'].mean(), inplace=True)  # Mengisi nilai hilang pada kolom 'rating' dengan rata-rata
-
-"""#### **Langkah 5.2: Menghapus Data Duplikat**
-
-Data duplikat dapat mengganggu analisis dan kualitas model. Oleh karena itu, kita perlu memeriksa dan menghapus duplikat jika ada.
-
-"""
-
-# Menghapus duplikat
-df_cleaned = df.drop_duplicates()
-
-"""#### **Langkah 5.3: Normalisasi atau Standarisasi Fitur**
-
-Untuk model seperti **KNN** atau **SVM**, fitur numerik perlu dinormalisasi atau distandarisasi agar model dapat bekerja dengan optimal. Di sini, kita akan menggunakan **StandardScaler** dari **scikit-learn** untuk melakukan standarisasi data numerik seperti **rating**, **latitude**, dan **longitude**.
-
-**Tujuan**: Memastikan bahwa semua fitur numerik berada dalam skala yang sama agar model machine learning tidak terpengaruh oleh perbedaan skala antar fitur.
-
-
-"""
-
-from sklearn.preprocessing import StandardScaler
-
-scaler = StandardScaler()
-df[['rating', 'latitude', 'longitude']] = scaler.fit_transform(df[['rating', 'latitude', 'longitude']])
-
-"""#### **Langkah 5.4: Deteksi dan Penanganan Outlier**
-
-Jika diperlukan, kita dapat memeriksa dan menangani outliers di kolom **rating**, **latitude**, dan **longitude**.
-
-Sebagai contoh, kita bisa menggunakan **IQR (Interquartile Range)** untuk mendeteksi outliers. Jika ada outliers yang tidak relevan, kita bisa menghapusnya.
-"""
-
-# Menggunakan IQR untuk mendeteksi outliers pada kolom rating
-Q1 = df['rating'].quantile(0.25)
-Q3 = df['rating'].quantile(0.75)
-IQR = Q3 - Q1
-lower_bound = Q1 - 1.5 * IQR
-upper_bound = Q3 + 1.5 * IQR
-
-df_cleaned = df[(df['rating'] >= lower_bound) & (df['rating'] <= upper_bound)]
-
-"""#### **Langkah 5.5: Encoding Data Kategorikal**
-
-Beberapa kolom, seperti **kategori** dan **preferensi**, berisi data kategorikal. Kita perlu mengonversi data kategorikal menjadi format numerik agar dapat digunakan dalam model machine learning.
-
-Contoh menggunakan **Label Encoding** untuk mengubah data kategorikal menjadi numerik:
-"""
-
-from sklearn.preprocessing import LabelEncoder
-
-encoder = LabelEncoder()
-
-# Mengubah kategori dan preferensi menjadi numerik
-df['kategori'] = encoder.fit_transform(df['kategori'])
-df['preferensi'] = encoder.fit_transform(df['preferensi'])
-
-"""Jika kolom memiliki banyak kategori, Anda bisa menggunakan **One-Hot Encoding** untuk menghindari penurunan kinerja model."""
-
-# Menggunakan One-Hot Encoding pada kolom kategorikal
-df = pd.get_dummies(df, columns=['kategori', 'preferensi'])
-
-"""#### **Langkah 5.6: Binning (Pengelompokan Data)**
-
-Jika diperlukan, Anda bisa melakukan **binning** (pengelompokan data) untuk mengubah fitur numerik menjadi kategori. Misalnya, mengelompokkan **rating** menjadi beberapa kategori seperti "Rendah", "Menengah", dan "Tinggi".
-"""
-
-# Membuat bin untuk rating
-bins = [0, 2.5, 4, 5]
-labels = ['Rendah', 'Menengah', 'Tinggi']
-df['rating_binned'] = pd.cut(df['rating'], bins=bins, labels=labels)
-
-# Menyimpan dataset hasil preprocessing ke dalam file CSV
-df_cleaned.to_csv('bali_tourist_attractions_preprocessed.csv', index=False)
-
-"""### **Kesimpulan dari Tahapan Preprocessing**
-
-* **Missing Values**: Tidak ada nilai yang hilang dalam dataset ini, tetapi jika ditemukan nilai hilang, kita dapat memilih untuk menghapus atau mengisi nilai hilang.
-* **Data Duplikat**: Kita telah menghapus baris duplikat.
-* **Normalisasi/Standarisasi**: Fitur numerik sudah dinormalisasi menggunakan **StandardScaler**.
-* **Outliers**: Outliers pada **rating** sudah ditangani dengan menggunakan metode **IQR**.
-* **Encoding**: Kolom **kategori** dan **preferensi** telah diencode menggunakan **LabelEncoder** dan **One-Hot Encoding** jika diperlukan.
-* **Binning**: Kolom **rating** sudah dikelompokkan menjadi kategori **Rendah**, **Menengah**, dan **Tinggi**.
-
----
-"""
+*
+::contentReference[oaicite:0]{index=0}
+ 
