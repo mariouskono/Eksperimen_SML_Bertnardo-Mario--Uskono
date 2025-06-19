@@ -77,8 +77,6 @@ Pustaka-pustaka ini akan membantu dalam:
 * **sklearn** untuk pembangunan dan evaluasi model machine learning.
 """
 
-!pip install mlflow --quiet
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
